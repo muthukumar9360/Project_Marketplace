@@ -21,7 +21,7 @@ function App() {
   const githubUrl = settings?.githubProfile || import.meta.env.VITE_GITHUB_PROFILE || "https://github.com/muthukumar9360";
   const linkedinUrl = settings?.linkedinProfile || import.meta.env.VITE_LINKEDIN_PROFILE || "https://linkedin.com/in/muthukumar9360";
   const leetcodeUrl = settings?.leetcodeProfile || import.meta.env.VITE_LEETCODE_PROFILE || "https://leetcode.com/muthukumar9360";
-  const portfolioUrl = settings?.portfolioUrl || import.meta.env.VITE_PORTFOLIO_URL || "#";
+  const portfolioUrl = settings?.portfolioUrl || import.meta.env.VITE_PORTFOLIO_URL || "https://muthuramalingam-portfolio.netlify.app/";
 
   return (
     <BrowserRouter>
