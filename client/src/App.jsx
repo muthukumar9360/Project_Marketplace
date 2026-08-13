@@ -27,7 +27,7 @@ function App() {
     <BrowserRouter>
       <div className="min-h-screen bg-slate-900 text-slate-100 font-sans flex flex-col">
         <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50">
-          <div className="w-full px-4 md:px-8 py-4 flex flex-wrap sm:flex-nowrap justify-between items-center gap-4">
+          <div className="w-full px-4 md:px-8 py-4 flex flex-wrap sm:flex-nowrap justify-center sm:justify-between items-center gap-4">
             <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent shrink-0">
               {siteConfig.websiteName}
             </Link>
