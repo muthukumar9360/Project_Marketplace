@@ -57,8 +57,21 @@ export default function AdminPage() {
       } catch (e) {
         console.error('Failed to load settings');
       }
-      // Settings loaded successfully
       
+      // STRICTLY request notification ONLY after successful login!
+      if ("Notification" in window) {
+        if (Notification.permission !== "granted" && Notification.permission !== "denied") {
+          await Notification.requestPermission();
+        }
+        if (Notification.permission === "granted") {
+          const { requestFirebaseToken } = await import('../firebase');
+          const token = await requestFirebaseToken();
+          if (token) {
+            await adminSaveFcmToken(token, credentials).catch(e => console.error("Failed to save FCM token", e));
+          }
+        }
+      }
+
       connectSocket();
       socket.emit('join_admin_room', credentials);
 
