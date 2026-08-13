@@ -278,7 +278,7 @@ export default function AdminPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <h1 className="text-3xl font-bold text-white">Admin Dashboard</h1>
         
-        <div className="flex bg-slate-800 p-1 rounded-xl border border-slate-700 w-fit">
+        <div className="flex bg-slate-800 p-1 rounded-xl border border-slate-700 w-full md:w-fit overflow-x-auto scrollbar-hide whitespace-nowrap">
           <button 
             onClick={() => setActiveTab('requests')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === 'requests' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-white'}`}

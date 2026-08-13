@@ -51,12 +51,12 @@ export default function PaymentPage() {
 
       <div className="bg-slate-800 rounded-3xl p-8 border border-slate-700 shadow-2xl relative overflow-hidden">
         {/* Project Summary */}
-        <div className="flex justify-between items-center mb-8 pb-8 border-b border-slate-700">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 pb-8 border-b border-slate-700 gap-4">
           <div>
             <div className="text-sm text-slate-400 mb-1">Project</div>
             <div className="font-bold text-white text-lg">{project.title}</div>
           </div>
-          <div className="text-right">
+          <div className="text-left sm:text-right">
             <div className="text-sm text-slate-400 mb-1">Amount</div>
             <div className="font-bold text-blue-400 text-2xl">₹{project.price}</div>
           </div>
