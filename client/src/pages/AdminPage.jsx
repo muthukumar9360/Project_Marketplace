@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { adminGetRequests, adminAcceptPayment, adminDeclinePayment, getSettings, adminUpdateSettings, adminSaveFcmToken } from '../services/api';
 import { socket, connectSocket, disconnectSocket } from '../services/socket';
-import { requestFirebaseToken } from '../firebase';
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -58,18 +57,8 @@ export default function AdminPage() {
       } catch (e) {
         console.error('Failed to load settings');
       }
-      // Request notification permission and get FCM token
-      if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
-        await Notification.requestPermission();
-      }
+      // Settings loaded successfully
       
-      if ("Notification" in window && Notification.permission === "granted") {
-        const token = await requestFirebaseToken();
-        if (token) {
-          await adminSaveFcmToken(token, credentials).catch(e => console.error("Failed to save FCM token", e));
-        }
-      }
-
       connectSocket();
       socket.emit('join_admin_room', credentials);
 
