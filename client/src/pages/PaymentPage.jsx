@@ -12,6 +12,7 @@ export default function PaymentPage() {
   const [error, setError] = useState('');
   const [settings, setSettings] = useState(null);
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const [selectedUpi, setSelectedUpi] = useState(null);
 
   useEffect(() => {
     Promise.all([getProjects(), getSettings()])
@@ -41,15 +42,16 @@ export default function PaymentPage() {
 
   const upiIdsString = settings?.upiId || siteConfig.upiId || '';
   const upiIds = upiIdsString.split(',').map(id => id.trim()).filter(id => id.length > 0);
+  const activeUpi = selectedUpi || upiIds[0];
 
   return (
     <div className="max-w-xl mx-auto px-4 py-12">
       <div className="text-center mb-10">
         <h1 className="text-3xl font-bold text-white mb-2">Complete Your Purchase</h1>
-        <p className="text-slate-400">Scan the QR code or use the UPI ID to pay securely.</p>
+        <p className="text-slate-400">Scan the QR code or copy the UPI ID to pay securely.</p>
       </div>
 
-      <div className="bg-slate-800 rounded-3xl p-8 border border-slate-700 shadow-2xl relative overflow-hidden">
+      <div className="bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-700 shadow-2xl relative overflow-hidden">
         {/* Project Summary */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 pb-8 border-b border-slate-700 gap-4">
           <div>
@@ -62,27 +64,55 @@ export default function PaymentPage() {
           </div>
         </div>
 
-        {/* UPI Details */}
-        <div className="flex flex-col items-center mb-8 space-y-3 w-full">
-          {upiIds.map((id, index) => (
-            <div key={index} className="w-full bg-slate-900 rounded-xl p-4 flex justify-between items-center border border-slate-700">
-              <div>
-                <div className="text-xs text-slate-500 mb-1 uppercase tracking-wider">UPI ID {upiIds.length > 1 ? index + 1 : ''}</div>
-                <div className="font-mono text-slate-200 text-lg break-all">{id}</div>
+        {/* UPI Selection Buttons (Only show if multiple UPIs exist) */}
+        {upiIds.length > 1 && (
+          <div className="mb-6">
+            <div className="text-sm text-slate-400 mb-3 text-center uppercase tracking-wider font-bold">Select UPI to Pay</div>
+            <div className="flex flex-wrap justify-center gap-3">
+              {upiIds.map((id, index) => (
+                <button
+                  key={index}
+                  onClick={() => setSelectedUpi(id)}
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${activeUpi === id ? 'bg-blue-600 text-white shadow-lg border-transparent' : 'bg-slate-900 text-slate-400 border border-slate-700 hover:text-white hover:border-slate-500'}`}
+                >
+                  UPI Option {index + 1}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Dynamic QR Code & ID Layer */}
+        {activeUpi && (
+          <div className="flex flex-col items-center mb-8 bg-slate-900/50 p-6 rounded-2xl border border-slate-700">
+            <div className="text-sm text-slate-400 mb-4 uppercase tracking-wider font-bold">Scan to Pay ₹{project.price}</div>
+            
+            <div className="bg-white p-4 rounded-2xl mb-6 shadow-xl w-48 h-48 flex justify-center items-center">
+              <img 
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=${activeUpi}&pn=${encodeURIComponent(settings?.sellerName || siteConfig.sellerName)}&am=${project.price === 'Free' ? 0 : project.price}`} 
+                alt="UPI QR Code" 
+                className="w-full h-full object-contain"
+              />
+            </div>
+            
+            <div className="w-full bg-slate-900 rounded-xl p-4 flex justify-between items-center border border-slate-700">
+              <div className="overflow-hidden">
+                <div className="text-xs text-slate-500 mb-1 uppercase tracking-wider">Selected UPI ID</div>
+                <div className="font-mono text-slate-200 text-sm sm:text-base break-all">{activeUpi}</div>
               </div>
               <button 
-                onClick={() => navigator.clipboard.writeText(id)}
-                className="text-blue-400 hover:text-blue-300 p-3 bg-blue-500/10 hover:bg-blue-500/20 rounded-lg transition-colors"
+                onClick={() => navigator.clipboard.writeText(activeUpi)}
+                className="text-blue-400 hover:text-blue-300 p-3 bg-blue-500/10 hover:bg-blue-500/20 rounded-lg transition-colors shrink-0 ml-4"
                 title="Copy UPI ID"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
               </button>
             </div>
-          ))}
-        </div>
+          </div>
+        )}
 
         <div className="bg-blue-500/10 border border-blue-500/20 text-blue-400 p-4 rounded-xl text-sm text-center mb-8">
-          Complete the payment by sending the exact amount to {upiIds.length > 1 ? <strong>ANY ONE of the UPI IDs</strong> : <strong>the UPI ID</strong>} above to get your project. After payment is completed, click <strong>I HAVE PAID</strong>.
+          Complete the payment by sending the exact amount. After payment is completed, click <strong>I HAVE PAID</strong>.
         </div>
 
         {error && (
