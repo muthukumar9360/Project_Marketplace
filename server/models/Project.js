@@ -22,6 +22,6 @@ const ProjectSchema = new mongoose.Schema({
   zipPath: { type: String, default: '' },
   isGitHubOnly: { type: Boolean, default: false },
   githubUrl: { type: String, default: '' }
-}, { timestamps: true });
+});
 
 module.exports = mongoose.model('Project', ProjectSchema);

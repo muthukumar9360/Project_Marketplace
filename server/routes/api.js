@@ -263,10 +263,6 @@ module.exports = (io) => {
         return res.status(404).json({ error: 'Invalid token' });
       }
       
-      if (tokenData.downloaded) {
-        return res.status(410).json({ error: 'Token already used', status: 'USED' });
-      }
-      
       if (new Date() > tokenData.expiresAt) {
         return res.status(410).json({ error: 'Token expired', status: 'EXPIRED' });
       }
@@ -293,11 +289,6 @@ module.exports = (io) => {
         return res.status(403).json({ error: 'Invalid token' });
       }
       
-      // 2. Validate it hasn't been used
-      if (tokenData.downloaded) {
-        return res.status(410).json({ error: 'This one-time download has already been used.' });
-      }
-      
       // 3. Validate expiry
       if (new Date() > tokenData.expiresAt) {
         return res.status(410).json({ error: 'Download access has expired.' });
@@ -308,9 +299,9 @@ module.exports = (io) => {
         return res.status(500).json({ error: 'Project configuration missing' });
       }
       
-      // 4. ATOMICALLY mark as downloaded
-      tokenData.downloaded = true;
-      await tokenData.save();
+      // 4. ATOMICALLY delete the token and the original payment request
+      await DownloadToken.deleteOne({ token });
+      await PaymentRequest.deleteOne({ id: tokenData.requestId });
       
       // Also notify socket if needed, but not strictly required
       io.to(`request_${tokenData.requestId}`).emit('download_used', { token });

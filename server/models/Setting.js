@@ -12,6 +12,6 @@ const SettingSchema = new mongoose.Schema({
   adminUsername: { type: String, default: 'muthukumar_9360' },
   adminPassword: { type: String, default: 'Muthukumar@9360' },
   adminFcmToken: { type: String, default: '' }
-}, { timestamps: true });
+});
 
 module.exports = mongoose.model('Setting', SettingSchema);
