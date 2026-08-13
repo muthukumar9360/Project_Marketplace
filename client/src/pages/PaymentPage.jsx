@@ -13,6 +13,7 @@ export default function PaymentPage() {
   const [settings, setSettings] = useState(null);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [selectedUpi, setSelectedUpi] = useState(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
     Promise.all([getProjects(), getSettings()])
@@ -64,20 +65,38 @@ export default function PaymentPage() {
           </div>
         </div>
 
-        {/* UPI Selection Buttons (Only show if multiple UPIs exist) */}
+        {/* UPI Selection Dropdown (Only show if multiple UPIs exist) */}
         {upiIds.length > 1 && (
-          <div className="mb-6">
+          <div className="mb-6 relative w-full sm:w-3/4 mx-auto z-20">
             <div className="text-sm text-slate-400 mb-3 text-center uppercase tracking-wider font-bold">Select UPI to Pay</div>
-            <div className="flex flex-wrap justify-center gap-3">
-              {upiIds.map((id, index) => (
-                <button
-                  key={index}
-                  onClick={() => setSelectedUpi(id)}
-                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${activeUpi === id ? 'bg-blue-600 text-white shadow-lg border-transparent' : 'bg-slate-900 text-slate-400 border border-slate-700 hover:text-white hover:border-slate-500'}`}
-                >
-                  UPI Option {index + 1}
-                </button>
-              ))}
+            <div className="relative">
+              <button
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className="w-full bg-slate-900 border border-slate-700 hover:border-slate-500 text-white p-4 rounded-xl flex justify-between items-center transition-all shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+              >
+                <div className="flex items-center gap-3 overflow-hidden">
+                  <svg className="w-5 h-5 text-blue-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                  <span className="font-mono text-sm sm:text-base truncate">{activeUpi}</span>
+                </div>
+                <svg className={`w-5 h-5 text-slate-400 shrink-0 transition-transform duration-300 ${dropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+              </button>
+              
+              {dropdownOpen && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl overflow-hidden z-30 animate-in fade-in slide-in-from-top-2 duration-200">
+                  {upiIds.map((id, index) => (
+                    <button
+                      key={index}
+                      onClick={() => { setSelectedUpi(id); setDropdownOpen(false); }}
+                      className={`w-full text-left p-4 flex items-center justify-between gap-3 transition-colors ${activeUpi === id ? 'bg-blue-600/20 text-blue-400' : 'text-slate-300 hover:bg-slate-700 hover:text-white'} ${index !== upiIds.length - 1 ? 'border-b border-slate-700/50' : ''}`}
+                    >
+                      <span className="font-mono text-sm sm:text-base truncate">{id}</span>
+                      {activeUpi === id && (
+                        <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )}
