@@ -68,7 +68,7 @@ export default function PaymentPage() {
             <div key={index} className="w-full bg-slate-900 rounded-xl p-4 flex justify-between items-center border border-slate-700">
               <div>
                 <div className="text-xs text-slate-500 mb-1 uppercase tracking-wider">UPI ID {upiIds.length > 1 ? index + 1 : ''}</div>
-                <div className="font-mono text-slate-200 text-lg">{id}</div>
+                <div className="font-mono text-slate-200 text-lg break-all">{id}</div>
               </div>
               <button 
                 onClick={() => navigator.clipboard.writeText(id)}

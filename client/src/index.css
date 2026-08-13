@@ -7,8 +7,8 @@
   --color-dark-card: #1e293b; /* slate-800 */
 }
 
-body {
-  @apply bg-slate-900 text-slate-100 font-sans antialiased;
+html, body {
+  @apply bg-slate-900 text-slate-100 font-sans antialiased overflow-x-hidden;
 }
 
 /* Base custom styles for scrollbar etc */
