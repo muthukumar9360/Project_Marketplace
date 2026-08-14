@@ -71,13 +71,11 @@ export const getProjects = async () => {
   return res.json();
 };
 
-export const adminGetGithubRepos = async (credentials) => {
-  const res = await fetch(`${API_URL}/admin/github/repos`, {
-    headers: {
-      'Authorization': 'Basic ' + btoa(`${credentials.username}:${credentials.password}`)
-    }
-  });
-  if (!res.ok) throw new Error('Failed to fetch github repos');
+export const adminGetGithubRepos = async () => {
+  const profileUrl = 'https://github.com/muthukumar9360';
+  const username = profileUrl.split('/').pop() || 'muthukumar9360';
+  const res = await fetch(`https://api.github.com/users/${username}/repos?type=public&sort=updated`);
+  if (!res.ok) throw new Error('Failed to fetch github repos from GitHub API');
   return res.json();
 };
 
