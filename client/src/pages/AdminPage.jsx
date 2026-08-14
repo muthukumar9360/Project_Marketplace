@@ -168,7 +168,7 @@ export default function AdminPage() {
       });
       setRepoConfigs(initialConfigs);
     } catch (err) {
-      alert('Failed to fetch github repos. Ensure VITE_GITHUB_PROFILE is set correctly in .env');
+      alert('Failed to fetch github repos. Ensure the GitHub API is accessible.');
     } finally {
       setSyncing(false);
     }

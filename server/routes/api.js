@@ -63,8 +63,7 @@ module.exports = (io) => {
   // Admin: Fetch public github repos
   router.get('/admin/github/repos', authMiddleware, async (req, res) => {
     try {
-      const settings = await Setting.findOne({ globalId: 'global' });
-      const profileUrl = settings?.githubProfile || '';
+      const profileUrl = 'https://github.com/muthukumar9360';
       const username = profileUrl.split('/').pop();
       if (!username) {
         return res.status(400).json({ error: 'GitHub profile URL not set in Settings' });

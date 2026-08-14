@@ -17,7 +17,7 @@ export default function Home() {
       .catch(console.error);
 
     // 2. Fetch all public GitHub repositories directly
-    const githubProfile = import.meta.env.VITE_GITHUB_PROFILE || 'https://github.com/muthukumar9360';
+    const githubProfile = 'https://github.com/muthukumar9360';
     const username = githubProfile.split('/').pop() || 'muthukumar9360';
     
     fetch(`https://api.github.com/users/${username}/repos?type=public&sort=updated`)
