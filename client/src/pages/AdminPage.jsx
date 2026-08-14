@@ -83,6 +83,12 @@ export default function AdminPage() {
         setTimeout(() => {
           setNotification(prev => prev?.id === req.id ? null : prev);
         }, 10000);
+        if ("Notification" in window && Notification.permission === "granted") {
+          new Notification("New Payment Verification Request!", {
+            body: `Verify payment of ₹${req.amount} for ${req.projectName}`,
+            icon: "/favicon.ico"
+          });
+        }
       });
       
     } catch (err) {

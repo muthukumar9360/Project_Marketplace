@@ -15,16 +15,4 @@ const firebaseConfig = {
 if (firebase.messaging.isSupported()) {
   firebase.initializeApp(firebaseConfig);
   const messaging = firebase.messaging();
-
-  messaging.onBackgroundMessage(function(payload) {
-    console.log('[firebase-messaging-sw.js] Received background message ', payload);
-    // Customize notification here
-    const notificationTitle = payload.data.title;
-    const notificationOptions = {
-      body: payload.data.body,
-      icon: '/favicon.ico'
-    };
-
-    return self.registration.showNotification(notificationTitle, notificationOptions);
-  });
 }
