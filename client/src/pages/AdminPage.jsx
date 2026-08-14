@@ -84,10 +84,19 @@ export default function AdminPage() {
           setNotification(prev => prev?.id === req.id ? null : prev);
         }, 10000);
         if ("Notification" in window && Notification.permission === "granted") {
-          new Notification("New Payment Verification Request!", {
-            body: `Verify payment of ₹${req.amount} for ${req.projectName}`,
-            icon: "/favicon.ico"
-          });
+          if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.ready.then(registration => {
+              registration.showNotification("New Payment Verification Request!", {
+                body: `Verify payment of ₹${req.amount} for ${req.projectName}`,
+                icon: "/favicon.ico"
+              });
+            });
+          } else {
+            new Notification("New Payment Verification Request!", {
+              body: `Verify payment of ₹${req.amount} for ${req.projectName}`,
+              icon: "/favicon.ico"
+            });
+          }
         }
       });
       
