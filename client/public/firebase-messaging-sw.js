@@ -16,3 +16,19 @@ if (firebase.messaging.isSupported()) {
   firebase.initializeApp(firebaseConfig);
   const messaging = firebase.messaging();
 }
+
+self.addEventListener('push', function(event) {
+  try {
+    const payload = event.data.json();
+    if (payload.data && payload.data.force_notification === 'true') {
+      const title = payload.data.title;
+      const options = {
+        body: payload.data.body,
+        icon: '/favicon.ico'
+      };
+      event.waitUntil(self.registration.showNotification(title, options));
+    }
+  } catch (e) {
+    console.error("Error handling custom push event", e);
+  }
+});

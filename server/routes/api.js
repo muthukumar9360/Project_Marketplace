@@ -129,7 +129,8 @@ module.exports = (io) => {
           try {
             await admin.getMessaging().send({
               token: settings.adminFcmToken,
-              notification: {
+              data: {
+                force_notification: 'true',
                 title: 'New Payment Verification Request!',
                 body: `Verify payment of ₹${amount} for ${projectName}`
               }
