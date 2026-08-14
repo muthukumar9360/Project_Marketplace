@@ -83,13 +83,6 @@ export default function AdminPage() {
         setTimeout(() => {
           setNotification(prev => prev?.id === req.id ? null : prev);
         }, 10000);
-
-        if ("Notification" in window && Notification.permission === "granted") {
-          new Notification("New Payment Verification Request!", {
-            body: `Verify payment of ₹${req.amount} for ${req.projectName}`,
-            icon: "/favicon.ico"
-          });
-        }
       });
       
     } catch (err) {
@@ -249,31 +242,7 @@ export default function AdminPage() {
 
   return (
     <div className="w-full px-4 md:px-8 py-12">
-      {/* In-App Toast Notification */}
-      {notification && (
-        <div className="fixed bottom-8 right-8 z-50 bg-blue-600 text-white p-6 rounded-2xl shadow-2xl border border-blue-400/50 flex flex-col gap-2 max-w-sm animate-bounce-short">
-          <div className="flex justify-between items-start gap-4">
-            <div>
-              <h3 className="font-bold text-lg leading-tight">New Payment Request!</h3>
-              <p className="text-blue-100 text-sm mt-1">
-                <strong>{notification.projectName}</strong>
-              </p>
-            </div>
-            <button onClick={() => setNotification(null)} className="text-blue-200 hover:text-white transition-colors p-1">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-            </button>
-          </div>
-          <div className="text-2xl font-black mt-2">₹{notification.amount}</div>
-          <div className="flex gap-2 mt-3">
-            <button 
-              onClick={() => { handleAccept(notification.id); setActiveTab('requests'); }}
-              className="flex-1 bg-white text-blue-600 font-bold py-2 rounded-lg hover:bg-blue-50 transition-colors shadow-sm"
-            >
-              ACCEPT
-            </button>
-          </div>
-        </div>
-      )}
+
 
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <h1 className="text-3xl font-bold text-white">Admin Dashboard</h1>
