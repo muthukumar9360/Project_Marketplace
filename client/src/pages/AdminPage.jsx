@@ -77,12 +77,7 @@ export default function AdminPage() {
 
       socket.on('new_payment_request', (req) => {
         setRequests(prev => [req, ...prev]);
-        setNotification(req);
-        
-        // Auto-hide the in-app toast after 10 seconds
-        setTimeout(() => {
-          setNotification(prev => prev?.id === req.id ? null : prev);
-        }, 10000);
+
         if (navigator.vibrate) {
           navigator.vibrate([200, 100, 200, 100, 400]); // Vibrate twice short, once long
         }
@@ -245,13 +240,7 @@ export default function AdminPage() {
 
   return (
     <div className="w-full px-4 md:px-8 py-12">
-      {/* Minimal Foreground Toast */}
-      {notification && (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-slate-800 text-white px-6 py-3 rounded-full shadow-2xl border border-slate-700 flex items-center gap-3 animate-fade-in-down">
-          <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
-          <span className="font-medium text-sm">New Request: <strong>₹{notification.amount}</strong> for {notification.projectName}</span>
-        </div>
-      )}
+
 
 
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
