@@ -91,6 +91,37 @@ export default function ProjectDetails() {
     galleryImages.push(`https://loremflickr.com/800/600/${encodeURIComponent(project.technologies?.[1] || project.category || 'technology')},programming?random=2`);
   }
 
+  const renderPurchaseBox = (className = "") => (
+    <div className={`bg-slate-800/50 p-6 rounded-2xl border border-slate-700 text-center shadow-2xl relative overflow-hidden group ${className}`}>
+      <div className="absolute inset-0 bg-gradient-to-b from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+      
+      <div className="text-sm text-slate-400 mb-2 uppercase tracking-widest font-bold">One-Time Purchase</div>
+      
+      <div className={`mb-6 ${project.price === 'Free' ? 'text-xl font-medium text-slate-400' : 'text-5xl font-extrabold bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent animate-pulse'}`}>
+        {project.price === 'Free' ? 'Amount not specified' : `₹${project.price}`}
+      </div>
+
+      {project.price === 'Free' ? (
+        <button 
+          disabled
+          className="block w-full bg-slate-700 text-slate-400 font-bold py-4 px-6 rounded-xl cursor-not-allowed border border-slate-600"
+        >
+          UNAVAILABLE
+        </button>
+      ) : (
+        <Link 
+          to={`/payment/${project.slug}`} 
+          className="relative block w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 px-6 rounded-xl transition-all shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)] hover:-translate-y-1 overflow-hidden"
+        >
+          <span className="relative z-10 flex items-center justify-center gap-2">
+            BUY NOW
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+          </span>
+        </Link>
+      )}
+    </div>
+  );
+
   return (
     <div className="w-full px-4 md:px-8 py-8 md:py-12">
       <Link to="/" className="inline-flex items-center gap-2 text-slate-400 hover:text-blue-400 transition-colors mb-8 font-medium">
@@ -130,6 +161,9 @@ export default function ProjectDetails() {
               <p>{project.fullDescription}</p>
             </div>
           </section>
+
+          {/* Mobile-only Purchase Box (appears after About) */}
+          {renderPurchaseBox("block md:hidden")}
 
           {/* Problem Solved */}
           {project.problemSolved && (
@@ -184,35 +218,8 @@ export default function ProjectDetails() {
 
         {/* Sidebar */}
         <div className="space-y-8">
-          {/* Purchase Box */}
-          <div className="bg-slate-800/50 p-6 rounded-2xl border border-slate-700 text-center shadow-2xl relative overflow-hidden group">
-            <div className="absolute inset-0 bg-gradient-to-b from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-            
-            <div className="text-sm text-slate-400 mb-2 uppercase tracking-widest font-bold">One-Time Purchase</div>
-            
-            <div className={`mb-6 ${project.price === 'Free' ? 'text-xl font-medium text-slate-400' : 'text-5xl font-extrabold bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent animate-pulse'}`}>
-              {project.price === 'Free' ? 'Amount not specified' : `₹${project.price}`}
-            </div>
-
-            {project.price === 'Free' ? (
-              <button 
-                disabled
-                className="block w-full bg-slate-700 text-slate-400 font-bold py-4 px-6 rounded-xl cursor-not-allowed border border-slate-600"
-              >
-                UNAVAILABLE
-              </button>
-            ) : (
-              <Link 
-                to={`/payment/${project.slug}`} 
-                className="relative block w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 px-6 rounded-xl transition-all shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)] hover:-translate-y-1 overflow-hidden"
-              >
-                <span className="relative z-10 flex items-center justify-center gap-2">
-                  BUY NOW
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                </span>
-              </Link>
-            )}
-          </div>
+          {/* Desktop Purchase Box */}
+          {renderPurchaseBox("hidden md:block")}
 
           {/* Tech Stack */}
           <section className="bg-slate-800 p-6 rounded-2xl border border-slate-700">
