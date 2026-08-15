@@ -265,10 +265,8 @@ module.exports = (io) => {
         return res.status(410).json({ error: 'This download link has already been used.', status: 'USED' });
       }
       
-      if (tokenData.expired || (tokenData.expiresAt && new Date() > tokenData.expiresAt)) {
-        if (!tokenData.expired) {
-          await DownloadToken.updateOne({ token }, { $set: { expired: true }, $unset: { expiresAt: 1 } });
-        }
+      if (tokenData.expiresAt && new Date() > tokenData.expiresAt) {
+        await DownloadToken.updateOne({ token }, { $set: { used: true }, $unset: { expiresAt: 1 } });
         return res.status(410).json({ error: 'Token expired', status: 'EXPIRED' });
       }
       
@@ -299,10 +297,8 @@ module.exports = (io) => {
         return res.status(410).json({ error: 'This download link has already been used.' });
       }
 
-      if (tokenData.expired || (tokenData.expiresAt && new Date() > tokenData.expiresAt)) {
-        if (!tokenData.expired) {
-          await DownloadToken.updateOne({ token }, { $set: { expired: true }, $unset: { expiresAt: 1 } });
-        }
+      if (tokenData.expiresAt && new Date() > tokenData.expiresAt) {
+        await DownloadToken.updateOne({ token }, { $set: { used: true }, $unset: { expiresAt: 1 } });
         return res.status(410).json({ error: 'Download access has expired.' });
       }
       
