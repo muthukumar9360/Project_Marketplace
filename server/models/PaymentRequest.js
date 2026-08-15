@@ -5,7 +5,7 @@ const PaymentRequestSchema = new mongoose.Schema({
   projectId: { type: String, required: true },
   projectName: { type: String, required: true },
   amount: { type: Number, required: true },
-  status: { type: String, enum: ['PENDING', 'ACCEPTED', 'DECLINED', 'DOWNLOADED'], default: 'PENDING' },
+  status: { type: String, enum: ['PENDING', 'ACCEPTED', 'DECLINED'], default: 'PENDING' },
   sessionToken: { type: String, required: true }
 });
 

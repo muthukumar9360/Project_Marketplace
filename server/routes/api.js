@@ -309,7 +309,6 @@ module.exports = (io) => {
       
       // 4. ATOMICALLY mark as used and unset expiresAt instead of deleting row
       await DownloadToken.updateOne({ token }, { $set: { used: true }, $unset: { expiresAt: 1 } });
-      await PaymentRequest.updateOne({ id: tokenData.requestId }, { $set: { status: 'DOWNLOADED' }, $unset: { expiresAt: 1 } });
       
       // Also notify socket if needed, but not strictly required
       io.to(`request_${tokenData.requestId}`).emit('download_used', { token });
