@@ -107,15 +107,13 @@ module.exports = (io) => {
     }
     
     try {
-      const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours for payment verification
       const request = new PaymentRequest({
         id: crypto.randomUUID(),
         projectId,
         projectName,
         amount,
         status: 'PENDING',
-        sessionToken: crypto.randomUUID(),
-        expiresAt
+        sessionToken: crypto.randomUUID()
       });
       await request.save();
       
