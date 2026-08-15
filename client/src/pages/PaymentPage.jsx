@@ -149,7 +149,7 @@ export default function PaymentPage() {
             className="mt-1 w-5 h-5 rounded border-slate-600 text-blue-500 focus:ring-blue-500 bg-slate-800"
           />
           <label htmlFor="terms" className="text-xs text-slate-400 leading-relaxed cursor-pointer select-none">
-            I understand that payments are <strong>strictly non-refundable</strong>. 
+            I understand that payments are <strong>strictly non-refundable</strong> and the Payment was done by Me was legitimate. 
             Once payment is verified, I will receive a one-time download link valid for exactly <strong>5 minutes</strong>. 
             If I fail to download the project within this time frame, access will be permanently revoked.
           </label>
