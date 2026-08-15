@@ -25,6 +25,8 @@ export default function DownloadPage() {
             setStatus('EXPIRED');
             clearInterval(intervalId);
             localStorage.removeItem('downloadSession');
+            // Silently ping the backend so it immediately deletes the expiresAt field
+            validateDownloadToken(token).catch(() => {});
           }
         };
         
