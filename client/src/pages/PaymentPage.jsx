@@ -131,7 +131,7 @@ export default function PaymentPage() {
         )}
 
         <div className="bg-blue-500/10 border border-blue-500/20 text-blue-400 p-4 rounded-xl text-sm text-center mb-8">
-          Complete the payment by sending the exact amount. After payment is completed, click <strong>I HAVE PAID</strong>.
+          Complete the payment by sending the amount to the above UPI ID using any UPI Application. After payment is completed, click <strong>I HAVE PAID</strong> after Accepting Terms and Conditions.<br><strong>If UPI id not working try paying to Other UPI's</strong></br>
         </div>
 
         {error && (
