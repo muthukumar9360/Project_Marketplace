@@ -7,7 +7,7 @@ const PaymentRequestSchema = new mongoose.Schema({
   amount: { type: Number, required: true },
   status: { type: String, enum: ['PENDING', 'ACCEPTED', 'DECLINED'], default: 'PENDING' },
   sessionToken: { type: String, required: true },
-  expiresAt: { type: Date, required: true, expires: 0 } // Auto-delete at expiresAt
+  expiresAt: { type: Date, required: true }
 });
 
 module.exports = mongoose.model('PaymentRequest', PaymentRequestSchema);
