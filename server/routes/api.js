@@ -261,12 +261,12 @@ module.exports = (io) => {
         return res.status(404).json({ error: 'Invalid token' });
       }
       
-      if (tokenData.used) {
-        return res.status(410).json({ error: 'This download link has already been used.', status: 'USED' });
+      if (!tokenData.expiresAt) {
+        return res.status(410).json({ error: 'This download link is no longer valid.', status: 'USED' });
       }
       
-      if (tokenData.expiresAt && new Date() > tokenData.expiresAt) {
-        await DownloadToken.updateOne({ token }, { $set: { used: true }, $unset: { expiresAt: 1 } });
+      if (new Date() > tokenData.expiresAt) {
+        await DownloadToken.updateOne({ token }, { $unset: { expiresAt: 1 } });
         return res.status(410).json({ error: 'Token expired', status: 'EXPIRED' });
       }
       
@@ -292,13 +292,13 @@ module.exports = (io) => {
         return res.status(403).json({ error: 'Invalid token' });
       }
       
-      // 3. Validate usage and expiry
-      if (tokenData.used) {
-        return res.status(410).json({ error: 'This download link has already been used.' });
+      // 3. Validate usage and expiry based on expiresAt presence
+      if (!tokenData.expiresAt) {
+        return res.status(410).json({ error: 'This download link is no longer valid or has already been used.' });
       }
 
-      if (tokenData.expiresAt && new Date() > tokenData.expiresAt) {
-        await DownloadToken.updateOne({ token }, { $set: { used: true }, $unset: { expiresAt: 1 } });
+      if (new Date() > tokenData.expiresAt) {
+        await DownloadToken.updateOne({ token }, { $unset: { expiresAt: 1 } });
         return res.status(410).json({ error: 'Download access has expired.' });
       }
       
@@ -307,8 +307,8 @@ module.exports = (io) => {
         return res.status(500).json({ error: 'Project configuration missing' });
       }
       
-      // 4. ATOMICALLY mark as used and unset expiresAt instead of deleting row
-      await DownloadToken.updateOne({ token }, { $set: { used: true }, $unset: { expiresAt: 1 } });
+      // 4. ATOMICALLY consume the token by unsetting expiresAt
+      await DownloadToken.updateOne({ token }, { $unset: { expiresAt: 1 } });
       
       // Also notify socket if needed, but not strictly required
       io.to(`request_${tokenData.requestId}`).emit('download_used', { token });
